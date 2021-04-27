@@ -1,8 +1,8 @@
-def arithmetic_arranger(problems, bool=False):
-    first_rows = ""
-    second_rows = ""
+def arithmetic_arranger(problems, include_solution=False):
+    first_nums = ""
+    second_nums = ""
     all_lines = ""
-    answers = ""
+    solutions = ""
     arranged_problems = ""
 
     # Limit problems to 5
@@ -12,8 +12,8 @@ def arithmetic_arranger(problems, bool=False):
     for problem in problems:
         # Generate rows
         parts = problem.split(" ")
-        first_row = parts[0]
-        second_row = parts[-1]
+        first_num = parts[0]
+        second_num = parts[-1]
         operator = parts[1]
 
         # Make sure operator is + or -
@@ -21,48 +21,51 @@ def arithmetic_arranger(problems, bool=False):
             return "Error: Operator must be '+' or '-'."
         
         # Make sure operands only contain digits
-        if not first_row.isdecimal() or not second_row.isdecimal():
+        if not first_num.isdecimal() or not second_num.isdecimal():
             return "Error: Numbers must only contain digits."
 
         # Make sure numbers are no more than 4 digits
-        if len(first_row) > 4 or len(second_row) > 4:
+        if len(first_num) > 4 or len(second_num) > 4:
             return "Error: Numbers cannot be more than four digits."
 
         # Start formatting
-        if len(first_row) > len(second_row):
-            second_row = operator + " " * (len(first_row) - len(second_row)) + " " + second_row
-            lines = "-" * (len(first_row) + 2)
-            first_row = " " * ((len(second_row) - len(first_row))) + first_row
-        elif len(second_row) > len(first_row):
-            first_row = " " * (len(second_row) - len(first_row)) + "  " + first_row
-            lines = "-" * (len(second_row) + 2)
-            second_row = operator + " " * (len(second_row) - len(first_row)) + " " + second_row
+        if len(first_num) > len(second_num):
+            second_num = operator + " " * (len(first_num) - len(second_num)) + " " + second_num
+            lines = "-" * (len(first_num) + 2)
+            first_num = " " * ((len(second_num) - len(first_num))) + first_num
+        elif len(second_num) > len(first_num):
+            first_num = " " * (len(second_num) - len(first_num)) + "  " + first_num
+            lines = "-" * (len(second_num) + 2)
+            second_num = operator + " " * (len(second_num) - len(first_num)) + " " + second_num
         else:
-            second_row = operator + " " + second_row
-            first_row = " " * 2 + first_row
-            lines = "-" * len(second_row)
+            second_num = operator + " " + second_num
+            first_num = " " * 2 + first_num
+            lines = "-" * len(second_num)
 
-        # Check whether to generate answers
-        if bool == True:
-            answer = str(eval(problem))
-            answer = " " * (len(lines) - len(answer)) + answer
+        # Check whether to generate solution
+        if include_solution == True:
+            solution = str(eval(problem))
+            solution = " " * (len(lines) - len(solution)) + solution
         else:
-            answer = ""
+            solution = ""
         
         # Assemble formatted rows
-        first_rows = first_rows + first_row + "    "
-        second_rows = second_rows + second_row + "    "
+        first_nums = first_nums + first_num + "    "
+        second_nums = second_nums + second_num + "    "
         all_lines = all_lines + lines + "    "
-        answers = answers + answer + "    "
+        solutions = solutions + solution + "    "
 
-    # Check whether to return problem answers too
-    if bool == True:
-        arranged_problems = first_rows + "\n" + second_rows + "\n" + all_lines + "\n" + answers
+        # If last problem remove trailing whitespace
+        if problem == problems[-1]:
+            first_nums = first_nums.rstrip()
+            second_nums = second_nums.rstrip()
+            all_lines = all_lines.rstrip()
+            solutions = solutions.rstrip()
+
+    # Check whether to return problem solutions too
+    if include_solution == True:
+        arranged_problems = first_nums + "\n" + second_nums + "\n" + all_lines + "\n" + solutions
     else:
-        arranged_problems = first_rows + "\n" + second_rows + "\n" + all_lines + "\n"
-    print(arranged_problems)
-    # return arranged_problems
-
-
-arithmetic_arranger(["32 + 68", "301 - 2", "45 + 43", "123 + 49"])
-arithmetic_arranger(["32 + 8", "1 - 3801", "9999 + 9999", "523 - 49"], True)
+        arranged_problems = first_nums + "\n" + second_nums + "\n" + all_lines
+    
+    return arranged_problems
